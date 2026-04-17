@@ -18,16 +18,18 @@ export function GetApiKeyForm() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email })
       });
-      const data = (await res.json().catch(() => null)) as any;
+      const data = (await res.json().catch(() => null)) as unknown;
+      const payload = data && typeof data === "object" ? (data as Record<string, unknown>) : null;
       if (!res.ok) {
         setStatus("error");
-        setMessage(data?.error ?? "Request failed");
+        const errMsg = payload && typeof payload.error === "string" ? payload.error : "Request failed";
+        setMessage(errMsg);
         return;
       }
 
-      if (data?.delivery === "inline" && typeof data?.apiKey === "string") {
+      if (payload?.delivery === "inline" && typeof payload.apiKey === "string") {
         setStatus("sent");
-        setInlineKey(data.apiKey);
+        setInlineKey(payload.apiKey);
         setMessage("Copy your API key now. It won’t be shown again.");
         return;
       }

@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 const exampleCurl = `curl -X POST https://YOUR_DOMAIN/api/v1/social-proof-screenshot \\
   -H "Content-Type: application/json" \\
   -H "x-api-key: YOUR_API_KEY" \\
@@ -17,9 +19,9 @@ export default function DocsPage() {
       <div style={{ maxWidth: 920, margin: "0 auto" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 16 }}>
           <h1 style={{ margin: 0, fontSize: 34 }}>API Documentation</h1>
-          <a href="/" style={{ color: "#93c5fd", textDecoration: "none", fontSize: 14 }}>
+          <Link href="/" style={{ color: "#93c5fd", textDecoration: "none", fontSize: 14 }}>
             Back to home
-          </a>
+          </Link>
         </div>
 
         <section style={{ marginTop: 22, lineHeight: 1.6, color: "#cbd5e1" }}>
