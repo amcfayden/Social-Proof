@@ -144,7 +144,9 @@ export async function captureBrandedScreenshot(pageUrl: string): Promise<Buffer>
       if (el) {
         // Some sites/layouts can throw on element screenshot; if so, fall back to page screenshot.
         try {
-          await el.scrollIntoViewIfNeeded();
+          await el.evaluate((node) => {
+            node.scrollIntoView({ block: "nearest", inline: "nearest" });
+          });
           shot = (await el.screenshot({ type: "png" })) as Buffer;
         } catch {
           shot = (await page.screenshot({ type: "png", fullPage: false })) as Buffer;
