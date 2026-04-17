@@ -8,7 +8,7 @@ export function getStripe(): Stripe {
   if (!key) throw new Error("Missing STRIPE_SECRET_KEY");
 
   cached = new Stripe(key, {
-    apiVersion: "2025-02-24.acacia"
+    apiVersion: "2025-08-27.basil"
   });
   return cached;
 }
