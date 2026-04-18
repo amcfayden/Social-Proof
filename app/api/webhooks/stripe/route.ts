@@ -1,5 +1,6 @@
 import { getSupabaseAdmin } from "@/lib/supabase/admin";
 import { getStripe } from "@/lib/stripe/client";
+import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 
 export const runtime = "nodejs";
@@ -77,17 +78,28 @@ async function upgradeEmailToPro(params: {
   if (updateError) throw new Error(updateError.message);
 }
 
+function readWebhookSecret(): string {
+  let s = process.env.STRIPE_WEBHOOK_SECRET?.trim() ?? "";
+  if (s.startsWith("STRIPE_WEBHOOK_SECRET=")) {
+    s = s.slice("STRIPE_WEBHOOK_SECRET=".length).trim();
+  }
+  if ((s.startsWith('"') && s.endsWith('"')) || (s.startsWith("'") && s.endsWith("'"))) {
+    s = s.slice(1, -1).trim();
+  }
+  return s;
+}
+
 export async function POST(request: Request) {
-  const sig = request.headers.get("stripe-signature");
-  // Trailing newline in Vercel breaks constructEvent; Stripe surfaces this as "signing secret contains whitespace".
-  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET?.trim();
+  // Match Stripe's Next.js App Router example: raw UTF-8 string + signature from next/headers.
+  const sig = (await headers()).get("stripe-signature")?.trim() ?? null;
+  const webhookSecret = readWebhookSecret();
 
   if (!sig || !webhookSecret) {
     return NextResponse.json({ error: "Missing webhook configuration" }, { status: 400 });
   }
 
   const stripe = getStripe();
-  const rawBody = Buffer.from(await request.arrayBuffer());
+  const rawBody = await request.text();
 
   let event;
   try {
