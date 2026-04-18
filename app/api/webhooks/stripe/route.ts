@@ -79,7 +79,8 @@ async function upgradeEmailToPro(params: {
 
 export async function POST(request: Request) {
   const sig = request.headers.get("stripe-signature");
-  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+  // Trailing newline in Vercel breaks constructEvent; Stripe surfaces this as "signing secret contains whitespace".
+  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET?.trim();
 
   if (!sig || !webhookSecret) {
     return NextResponse.json({ error: "Missing webhook configuration" }, { status: 400 });
