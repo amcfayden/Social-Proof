@@ -33,8 +33,9 @@ export async function POST(request: Request) {
     );
   }
 
-  const priceId = process.env.STRIPE_PRICE_ID_PRO;
-  const appUrl = process.env.APP_URL;
+  // Vercel pastes often include a trailing newline — Stripe treats `price_xxx\n` as a different id.
+  const priceId = process.env.STRIPE_PRICE_ID_PRO?.trim();
+  const appUrl = process.env.APP_URL?.trim();
   if (!priceId) {
     return NextResponse.json(
       { error: "Server configuration error", message: "Missing STRIPE_PRICE_ID_PRO" },
