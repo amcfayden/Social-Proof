@@ -1,4 +1,5 @@
 import { GetApiKeyForm } from "@/app/GetApiKeyForm";
+import { UpgradeToProForm } from "@/app/UpgradeToProForm";
 
 const codeExample = `curl -X POST https://YOUR_DOMAIN/api/v1/social-proof-screenshot \\
   -H "Content-Type: application/json" \\
@@ -70,6 +71,14 @@ export default function HomePage() {
             <div style={{ color: "#cbd5e1", fontSize: 13, lineHeight: 1.5 }}>
               Great for testing and small automations.
             </div>
+            <div style={{ marginTop: 12, fontSize: 13 }}>
+              <a
+                href="#upgrade-to-pro"
+                style={{ color: "#93c5fd", textDecoration: "none", fontWeight: 600 }}
+              >
+                Upgrade to Pro →
+              </a>
+            </div>
           </div>
 
           <div
@@ -99,6 +108,18 @@ export default function HomePage() {
           }}
         >
           <GetApiKeyForm />
+        </section>
+
+        <section
+          style={{
+            border: "1px solid rgba(148,163,184,0.18)",
+            background: "rgba(15,23,42,0.55)",
+            borderRadius: 14,
+            padding: 18,
+            marginBottom: 10
+          }}
+        >
+          <UpgradeToProForm />
         </section>
 
         <div
